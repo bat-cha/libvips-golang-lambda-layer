@@ -1,0 +1,14 @@
+service: libvips-golang-lambda-layer
+
+provider:
+  name: aws
+  region: eu-west-1
+  runtime: go1.x
+
+layers:
+  libvips:
+    path: layer
+    description: libvips with go1.x
+    compatibleRuntimes:
+      - go1.x
+    licenseInfo: MIT License
