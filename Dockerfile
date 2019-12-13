@@ -12,7 +12,7 @@ WORKDIR /build
 ARG VIPS_VERSION=8.8.4
 
 ENV WORKDIR="/build"
-ENV INSTALLDIR="/opt"
+ENV INSTALLDIR="/opt/vips"
 ENV VIPS_VERSION=$VIPS_VERSION
 
 # Install deps for libvips. Details: https://libvips.github.io/libvips/install.html
@@ -24,7 +24,7 @@ RUN yum install -y \
 
 # Clone repo and checkout version tag.
 #
-RUN git clone git://github.com/libvips/libvips.git && \
+RUN git clone https://github.com/libvips/libvips.git && \
     cd libvips && \
     git checkout "v${VIPS_VERSION}"
 
@@ -42,9 +42,12 @@ RUN cd ./libvips && \
 # Copy only needed so files to new share/lib.
 #
 RUN mkdir -p share/lib && \
-    cp -a $INSTALLDIR/lib/libvips.so* $WORKDIR/share/lib/
+    cp -a $INSTALLDIR/lib/libvips.so* $WORKDIR/share/vips/lib/
 
 # # Create sym links for `glib_libname` and `gobject_libname` to work.
 # RUN cd ./share/lib/ && \
 #     ln -s /usr/lib64/libglib-2.0.so.0 libglib-2.0.so && \
 #     ln -s /usr/lib64/libgobject-2.0.so.0 libgobject-2.0.so
+ENV PKG_CONFIG_PATH=$PKG_CONFIG_PATH:$INSTALLDIR/lib/pkgconfig
+RUN echo "Installed libvips $(pkg-config --modversion vips)"
+
