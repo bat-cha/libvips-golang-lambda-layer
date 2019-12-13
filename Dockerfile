@@ -41,7 +41,7 @@ RUN cd ./libvips && \
 
 # Copy only needed so files to new share/lib.
 #
-RUN mkdir -p share/lib && \
+RUN mkdir -p share/vips/lib && \
     cp -a $INSTALLDIR/lib/libvips.so* $WORKDIR/share/vips/lib/
 
 # # Create sym links for `glib_libname` and `gobject_libname` to work.
